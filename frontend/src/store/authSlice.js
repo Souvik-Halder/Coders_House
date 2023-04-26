@@ -1,0 +1,41 @@
+
+
+import { createSlice } from '@reduxjs/toolkit'
+
+
+
+
+const initialState = {
+  isAuth: false,
+  user: null,
+  otp: {
+    phone: '',
+    hash: ''
+  }
+
+}
+
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setAuth: (state, action) => {
+      //to set the user this will be used
+      const{user}= action.payload
+      state.user=user;
+      state.isAuth=true;
+    },
+    setOtp: (state, action) => {
+      //to get the otp at the phone and to get the phone and hash to set in the otp object declared as initial state
+      const {phone,hash}=action.payload;
+      state.otp.phone=phone;
+      state.otp.hash=hash;
+    },
+
+  },
+})
+
+// Action creators are generated for each case reducer function
+export const { setAuth, setOtp } = authSlice.actions
+
+export default authSlice.reducer
