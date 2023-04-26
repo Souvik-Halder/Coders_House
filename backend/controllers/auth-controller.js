@@ -3,7 +3,7 @@ const { generateOtp, sendBySms } = require('../services/otp-service')
 const { hashOtp } = require('../services/hash-service');
 const {isValidOtp}=require('../services/otp-service')
 const {findUser, createUser}=require('../services/user-service');
-const { generateTokens } = require('../services/token-service');
+const { generateTokens, storeRefreshToken } = require('../services/token-service');
 const UserDto=require('../dtos/user-dto');
 
 
@@ -60,13 +60,15 @@ const verifyOtp=async(req,res,next)=>{
     }
     else{
             const data=`${phone}.${otp}.${expires}`
-            const isValid=isValidOtp(hashedOtp,data);
+            const isValid=await isValidOtp(hashedOtp,data);
+          
             if(!isValid){
                 res.status(400).json({
                     message:'Invalid Otp'
                 })
             }
-           else{ let user;
+           else{ 
+            let user;
        
             try{
                 user=await findUser({phone:phone});
@@ -84,14 +86,19 @@ const verifyOtp=async(req,res,next)=>{
           const {accessToken,refreshToken}=await generateTokens({_id:user._id,activated:false});
 
         //we are storing the access token in the local storage and refresh token in the 
-
+          await  storeRefreshToken(refreshToken,user._id);
         res.cookie('refreshToken',refreshToken,{
             maxAge:1000*60*60*24*30,
             httpOnly:true
         })
+        res.cookie('accessToken',accessToken,{
+            maxAge:1000*60*60*24*30,
+            httpOnly:true
+        })
+
 
         const userDto=new UserDto(user);//creating the object of the UserDto Class and sending as a response
-        res.status(200).json({accessToken,user:userDto})}
+        res.status(200).json({user:userDto,auth:true})}
     }
 }
 

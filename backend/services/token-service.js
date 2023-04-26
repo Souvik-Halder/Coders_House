@@ -1,5 +1,6 @@
 
 const jwt=require('jsonwebtoken');
+const refreshModel = require('../models/refresh-model');
 const accessTokenSecret=process.env.JWT_ACCESS_TOKEN_SECRET;
 const refreshTokenSecret=process.env.JWT_REFRESH_TOKEN_SECRET;
 
@@ -13,9 +14,26 @@ const generateTokens=async(payload)=>{
     return {accessToken,refreshToken}
 }
 
+const storeRefreshToken=async(token,userId)=>{
+ try{
+    refreshModel.create({
+        token,
+        userId,
+    })
+
+ }catch(error){
+    console.log(error.message)
+ }
+}
+
+const verifyAccessToken=async(token)=>{
+    return jwt.verify(token,accessTokenSecret);
+}
 
 
 
 module.exports={
-generateTokens
+generateTokens,
+verifyAccessToken,
+storeRefreshToken
 }

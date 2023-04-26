@@ -10,6 +10,7 @@ const createUser=async(data)=>{
     return user;
 }
 
+
 module.exports={
     findUser,
     createUser

@@ -23,7 +23,8 @@ const sendBySms=async(phone,otp)=>{
 
 }
 const isValidOtp=async(hashedOtp,data)=>{
-    let computedHash=hashOtp(data);
+    let computedHash=await hashOtp(data);
+
     
     if(computedHash === hashedOtp){
         return true
