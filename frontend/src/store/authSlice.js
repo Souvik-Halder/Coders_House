@@ -23,7 +23,13 @@ export const authSlice = createSlice({
       //to set the user this will be used
       const{user}= action.payload
       state.user=user;
-      state.isAuth=true;
+      if(user===null){
+        state.isAuth=false
+      }
+      else{
+        state.isAuth=true;
+      }
+      
     },
     setOtp: (state, action) => {
       //to get the otp at the phone and to get the phone and hash to set in the otp object declared as initial state

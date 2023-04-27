@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Home from './pages/Home/Home';
@@ -8,12 +8,20 @@ import Authenticate from './pages/Authenticate/Authenticate';
 import Activate from './pages/Activate/Activate';
 import Rooms from './pages/Rooms/Rooms';
 import { useSelector } from 'react-redux';
+import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
+import Loader from './components/shared/Loader/Loader';
 
 
 
 
 function App() {
+ 
+
+   const {loading}=useLoadingWithRefresh();
+
+
   return (
+    loading? <Loader message="Loading, please wait.."/>:(
     <Router>
       <Navigation />
       <Routes>
@@ -50,6 +58,7 @@ function App() {
 
 
     </Router>
+    )
   );
 }
 
