@@ -7,20 +7,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setAvatar } from '../../../store/activateSlice'
 import {activate} from '../../../http/index'
 import {setAuth} from '../../../store/authSlice'
+import Loader from '../../../components/shared/Loader/Loader'
 
 function StepAvatar({onNext}) {
 
  const {name,avatar}=useSelector(state=>state.activate);
  const dispatch=useDispatch();
 const [image, setImage] = useState('/images/monkey-avatar.png');
+  const [loading, setLoading] = useState(false);
   async function submit(){
+    if(!name || !avatar) return;
    try {
+    setLoading(true)
     const {data}=await activate({name,avatar})
    if(data.auth){
     dispatch(setAuth(data));
    }
   } catch (error) {
     console.log(error.message)
+   }finally{
+    setLoading(false);
    }
   }
   function captureImage(e){
@@ -35,8 +41,9 @@ const [image, setImage] = useState('/images/monkey-avatar.png');
     console.log(e)
   }
   return (
-    <>
-       <Card title={`Okay, ${name}`} icon="monkey-emoji">
+     loading? <Loader message="Activation in progress...."/>:(
+      <>
+          <Card title={`Okay, ${name}`} icon="monkey-emoji">
                 <p className={styles.subHeading}>How’s this photo?</p>
                 <div className={styles.avatarWrapper}>
                     <img
@@ -61,7 +68,8 @@ const [image, setImage] = useState('/images/monkey-avatar.png');
                     <Button onClick={submit} text="Next" icon="arrow-forward" />
                 </div>
             </Card>
-    </>
+      </>
+     )
   )
 }
 
