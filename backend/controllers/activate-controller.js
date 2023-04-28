@@ -15,9 +15,9 @@ const activate=async(req,res,next)=>{
         })
     }
   
-
+ 
         // Image  Base64 //Here we are using the regex
-        const buffer=Buffer.from(avatar.replace(/^data:image\/png;base64,/,''),'base64');
+        const buffer=Buffer.from(avatar.replace(/^data:image\/(png|jpg|jpeg);base64,/,''),'base64');
         const imagePath=`${Date.now()}-${Math.round(
             Math.random()*1e9
         )}.png`;//This is for generating the image name to store the image in the file
@@ -27,9 +27,10 @@ const activate=async(req,res,next)=>{
         }catch(error){
            return res.status(500).json({message:'Could not process the image'})
         }
-        const userId=req.user._id
+        const userId=req.user._id 
         //update user
       try {
+        //find the user in the user-model and need to update the values
         const user= await findUser({_id:userId});
     
         if(!user){
