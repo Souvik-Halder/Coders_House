@@ -1,11 +1,19 @@
-import React from 'react'
-import styles from './TextInput.module.css'
-function TextInput(props) {
-  return (
-    <div>
-      <input type='text' className={styles.input} {...props}/>
-    </div>
-  )
-}
+import React from 'react';
+import styles from './TextInput.module.css';
 
-export default TextInput
+const TextInput = (props) => {
+    return (
+        <div>
+            <input
+                className={styles.input}
+                style={{
+                    width: props.fullwidth === 'true' ? '90%' : 'inherit',
+                }}
+                type="text"
+                {...props}
+            />
+        </div>
+    );
+};
+
+export default TextInput;
