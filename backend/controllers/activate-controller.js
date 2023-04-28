@@ -25,7 +25,7 @@ const activate=async(req,res,next)=>{
             const jimResp=await Jimp.read(buffer);
             jimResp.resize(150,Jimp.AUTO).write(path.resolve(__dirname,`../storage/${imagePath}`));//here the width and height is decider
         }catch(error){
-            res.status(500).json({message:'Could not process the image'})
+           return res.status(500).json({message:'Could not process the image'})
         }
         const userId=req.user._id
         //update user

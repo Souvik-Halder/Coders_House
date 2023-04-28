@@ -35,5 +35,5 @@ const verifyAccessToken=async(token)=>{
 module.exports={
 generateTokens,
 verifyAccessToken,
-storeRefreshToken
+storeRefreshToken 
 }
