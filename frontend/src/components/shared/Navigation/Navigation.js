@@ -38,7 +38,7 @@ const Navigation = () => {
             {isAuth && (
                 <div className={styles.navRight}>
                   {/* This user?.name refers to the if there is user.name present then display the component otherwise don't display the component */}
-                    <h3>{user?.name}</h3>
+                  {  user.name && <h3>{user.name}</h3>}
                     <Link to="/">
                         <img
                             className={styles.avatar}
