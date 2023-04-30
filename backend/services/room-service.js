@@ -14,7 +14,12 @@ const getAllRooms=async(types)=>{
     const rooms=await RoomModel.find({roomType:{$in:types}}).populate('ownerId').populate('speakers').exec();
     return rooms;
 }
+const getRoom=async(roomId)=>{
+    const room=await RoomModel.findOne({_id:roomId});
+    return room;
+}
 module.exports={
     createRoomService,
-    getAllRooms
+    getAllRooms,
+    getRoom
 }
