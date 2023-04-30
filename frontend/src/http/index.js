@@ -29,6 +29,8 @@ export const createRoom=(data)=>api.post('/api/rooms',data)
 
 export const getAllRooms=()=>api.get('/api/rooms');
 
+export const getRoom=(roomId)=>api.get(`/api/rooms/${roomId}`)
+
 // Interceptors to get the access token from the refresh token after access token expires we will generate the accessToken from RefreshToken 
 api.interceptors.response.use(
     (config) => {

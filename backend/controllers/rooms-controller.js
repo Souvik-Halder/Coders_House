@@ -1,5 +1,6 @@
+
 const RoomDto = require("../dtos/room-dto");
-const { createRoomService, getAllRooms } = require("../services/room-service");
+const { createRoomService, getAllRooms, getRoom } = require("../services/room-service");
 
 
 const create=async(req,res,next)=>{
@@ -21,8 +22,13 @@ const index=async(req,res,next)=>{
     const allRooms = rooms.map(room=>new RoomDto(room))
     return res.json(allRooms);
 }
+const show=async(req,res,next)=>{
+    const room=await getRoom(req.params.roomId);
+    return res.status(200).json(room);
+}
 
 module.exports={
     create,
-    index
+    index,
+    show
 }
