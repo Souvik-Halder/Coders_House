@@ -6,9 +6,11 @@ import styles from './Room.module.css'
 import { getRoom } from '../../http';
 const Room = () => {
     const {id : roomId}=useParams();
+    const [isMute, setIsMute] = useState(true);
     const user=useSelector(state=>state.auth.user); 
     const navigate=useNavigate();
   const [room, setRoom] = useState(null);
+ 
   useEffect(()=>{
     const fetchRoom=async()=>{
     const {data}=await getRoom(roomId);
@@ -19,14 +21,27 @@ const Room = () => {
   },[roomId])
 
 
-    const {clients,provideRef}=useWebRTC(roomId,user);
+  useEffect(() => {
+    
+   handleMute(isMute,user.id)
+  }, [isMute]);
+
+    const {clients,provideRef,handleMute}=useWebRTC(roomId,user);
     const handManualLeave=()=>{
      navigate('/rooms')
     }
-    const handleMuteClick=(id)=>{
-      console.log(id);
+    const handleMuteClick=(clientId)=>{
+      //it will simply change the upper isMute Variable after changing the upper variable the useEffect automatically change the component
+      if(clientId!==user.id) return;
+      //the upper code says that if the mike is not mine then we can't mute/unmute it
+      //so if the client displys on the screen is not me then it simply return so that i can't mute or unmute them
+    //   console.log('client mute ',clientId)
+      setIsMute((isMute)=>!isMute); 
+
     }
-    // console.log(clients)
+  
+
+
   return (
     <div>
     <div className="container">

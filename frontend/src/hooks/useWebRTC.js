@@ -10,14 +10,14 @@ export const useWebRTC = (roomId, user) => {
     const connections = useRef({});
     const socket = useRef(null);
     const localMediaStream = useRef(null);
-
+    const clientsRef=useRef([]);//here by using the ref we are managing the two copies of client one is in the state and one is the ref 
     const addNewClient = useCallback(
         (newClient, cb) => {
             const lookingFor = clients.find(
                 (client) => client.id === newClient.id
             );
-
-            console.log('clients', clients, lookingFor);
+                
+            
             if (lookingFor === undefined) {
                 setClients(
                     (existingClients) => [...existingClients, newClient],
@@ -64,7 +64,7 @@ export const useWebRTC = (roomId, user) => {
             connections.current[peerId].ontrack = ({
                 streams: [remoteStream],
             }) => {
-                addNewClient(remoteUser, () => {
+                addNewClient({...remoteUser,muted:true}, () => {
                     // console.log('peer', audioElements.current, peerId);
                     if (audioElements.current[remoteUser.id]) {
                         audioElements.current[remoteUser.id].srcObject =
@@ -129,7 +129,8 @@ export const useWebRTC = (roomId, user) => {
 
         startCapture().then(() => {
             // add user to clients list
-            addNewClient(user, () => {
+            //here we are sending the user and also making the muted is true
+            addNewClient({...user,muted:true}, () => {
                 const localElement = audioElements.current[user.id];
                 if (localElement) {
                     localElement.volume = 0;
@@ -228,11 +229,86 @@ export const useWebRTC = (roomId, user) => {
         };
     }, []);
 
+    useEffect(()=>{
+        // here we are storing the clients in clients Ref so the UI will not change as per the Ref because useRef don't  reRender the component with change
+        clientsRef.current=clients
+
+    },[clients])
+
+
+    //Listen for mute/unmute server
+    useEffect(()=>{
+        socket.current.on(ACTIONS.MUTE,({peerId,userId})=>{
+            setMute(true,userId);
+        })
+        socket.current.on(ACTIONS.UN_MUTE,({peerId,userId})=>{
+            setMute(false,userId);
+        })
+
+        const setMute=(mute,userId)=>{
+            //clients
+            const clientIdx=clientsRef.current.map(client=>client.id).indexOf(userId);
+            console.log('idx',clientIdx);
+
+            const connectedClients= JSON.parse(
+                JSON.stringify(clientsRef.current)
+            )
+            //This below if statement stands for that the client is present in the list or not {if present it makes the clientIdx greater than -1}
+            if(clientIdx > -1){
+                //it simply change the property of mute and unmute on the clients
+                connectedClients[clientIdx].muted=mute;
+                setClients(connectedClients);
+
+            }
+            //This upper map will return the array of the id of the clients
+
+
+            //setClient
+            //here we need to set the muted property of the client so after changing the property we need to set the client
+        }
+
+    },[])
+
+
     const provideRef = (instance, userId) => {
         audioElements.current[userId] = instance;
     };
 
-  
 
-    return { clients, provideRef };
+
+
+
+
+
+    //Handling mute
+    const handleMute=(isMute,userId)=>{
+        console.log("Mute"+isMute);
+        let settled=false;
+      let interval=setInterval(()=>{
+        if(localMediaStream.current){
+            //here so if isMute is true then we need to false the enabled so we are doing that
+        localMediaStream.current.getTracks()[0].enabled=!isMute;
+        if(isMute){
+            //if I am mute then we need to send the data to the other client that I am Mute so that the ui of the other client should be updated so that every client see each other on changing the element
+            socket.current.emit(ACTIONS.MUTE,{
+                roomId,
+                userId
+            })
+        }else{
+            socket.current.emit(ACTIONS.UN_MUTE,{
+                roomId,
+                userId
+            })
+        }
+        settled=true;
+        }
+        if(settled){
+            //if settled is true then clear the interval so that it don't need to check repeatedly that
+             //the client is muted or not
+            clearInterval(interval);
+        }
+      },200)
+    }
+
+    return { clients, provideRef,handleMute };
 };

@@ -191,6 +191,32 @@ io.on('connection', (socket) => {
         });
     });
 
+    //Handle the mute/unmute
+    socket.on(ACTIONS.MUTE,({roomId,userId})=>{
+        console.log("mute",userId)
+        const clients=Array.from(io.sockets.adapter.rooms.get(roomId)||[]);
+        clients.forEach(clientId=>{
+            io.to(clientId).emit(ACTIONS.MUTE,{
+                peerId:socket.id,
+                userId,
+            })
+        })
+    })
+
+    socket.on(ACTIONS.UN_MUTE,({roomId,userId})=>{
+        console.log("unmute",userId)
+        const clients=Array.from(io.sockets.adapter.rooms.get(roomId)||[]);
+        clients.forEach(clientId=>{
+            io.to(clientId).emit(ACTIONS.UN_MUTE,{
+                peerId:socket.id,
+                userId,
+            })
+        })
+    })
+
+
+
+    //Leaving the room
     const leaveRoom = () => {
         const { rooms } = socket;
         console.log('leaving', rooms);
@@ -216,7 +242,7 @@ io.on('connection', (socket) => {
 
         delete socketUserMap[socket.id];
 
-        console.log('map', socketUserMap);
+        // console.log('map', socketUserMap);
     };
 
     socket.on(ACTIONS.LEAVE, leaveRoom);
