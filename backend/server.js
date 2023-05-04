@@ -40,6 +40,7 @@ app.use('/storage',express.static('storage'))
 //Data Base connection
 DbConnect();
 app.get('/',(req,res)=>{
+    res.cookie('fjslkd','fjisdjfsjdlfjdl',{secure:true,httpOnly:true});
 res.send("Hello from Express js")
 })
 
