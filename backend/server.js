@@ -37,7 +37,7 @@ const corsOption={
  credentials: true, 
   optionSuccessStatus: 200,
   Headers: true,
-  exposedHeaders: 'Set-Cookie'
+  exposedHeaders: 'Set-Cookie',
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   allowedHeaders: [
     'Access-Control-Allow-Origin',
