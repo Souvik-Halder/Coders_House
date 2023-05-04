@@ -28,7 +28,7 @@ app.use(cookieParser());
     
 //Cors middlware
 const corsOption={
-    origin:['http://localhost:3000'],
+    origin:['http://localhost:3000','https://coder-house-app.onrender.com'],
     credentials:true,
 }
 app.use(cors(corsOption))
