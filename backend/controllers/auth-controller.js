@@ -113,13 +113,13 @@ const refresh = async (req, res, next) => {
         )
     } catch (err) {
        
-       return res.status(401).json({message:"Invalid token"})
+       return res.status(401).json({message:"Invalid token 2"})
     }
     //check if token is in dataBase
     try{
         const token = await findRefreshToken(userData._id,refreshTokenFromCookie)
         if(!token){
-            return res.status(401).json({message:"Invalid Token"})
+            return res.status(401).json({message:"Invalid Token 1"})
         }
     }catch(error){
         return res.status(500).json({message:"Internal error"})
