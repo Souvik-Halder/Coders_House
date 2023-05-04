@@ -24,7 +24,7 @@ const io=require('socket.io')(server,{
 //To get the json data at server Json Middleware
 app.use(express.json({limit:'8mb'}))
 app.use(function(req, res, next) {
-res.setHeader('Access-Control-Allow-Origin', 'https://coder-house-app.onrender.com');
+res.setHeader('Access-Control-Allow-Origin', true);
 
   next();
 });
