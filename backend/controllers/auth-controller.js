@@ -91,12 +91,14 @@ const verifyOtp = async (req, res, next) => {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 secure:true,
                 httpOnly:true,
+                   sameSite:'none'
               
             })
             res.cookie('accessToken', accessToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 secure:true,
-                httpOnly:true
+                httpOnly:true,
+                sameSite:'none'
             })
 
 
@@ -146,11 +148,13 @@ const refresh = async (req, res, next) => {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         secure:true,
         httpOnly:true,
+           sameSite:'none'
     })
     res.cookie('accessToken', accessToken, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         secure:true,
-        httpOnly:true
+        httpOnly:true,
+           sameSite:'none'
     })
 
     //send the response
