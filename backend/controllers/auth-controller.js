@@ -143,10 +143,12 @@ const refresh = async (req, res, next) => {
     //put the tokens in the cookie
     res.cookie('refreshToken', refreshToken, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
+        secure:true,
         httpOnly: true
     })
     res.cookie('accessToken', accessToken, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
+        secure:true,
         httpOnly: true
     })
 
