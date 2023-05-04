@@ -35,7 +35,8 @@ app.use(cors(corsOption))
 //To make the storage folder static so that we can easily see the images by the url
 app.use('/storage',express.static('storage'))
 app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+res.setHeader('Access-Control-Allow-Origin', 'https://coder-house-app.onrender.com');
+
   next();
 });
 
