@@ -34,7 +34,16 @@ app.use(cookieParser());
 //Cors middlware
 const corsOption={
     origin:['http://localhost:3000','https://coder-house-app.onrender.com'],
-    credentials:true,
+ credentials: true, 
+  optionSuccessStatus: 200,
+  Headers: true,
+  exposedHeaders: 'Set-Cookie'
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Access-Control-Allow-Origin',
+    'Content-Type',
+    'Authorization'
+  ]
 }
 app.use(cors(corsOption))
 //To make the storage folder static so that we can easily see the images by the url
