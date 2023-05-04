@@ -90,12 +90,12 @@ const verifyOtp = async (req, res, next) => {
             res.cookie('refreshToken', refreshToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 secure:true,
-                httpOnly: true
+              
             })
             res.cookie('accessToken', accessToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 secure:true,
-                httpOnly: true
+
             })
 
 
@@ -144,12 +144,12 @@ const refresh = async (req, res, next) => {
     res.cookie('refreshToken', refreshToken, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         secure:true,
-        httpOnly: true
+        
     })
     res.cookie('accessToken', accessToken, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         secure:true,
-        httpOnly: true
+       
     })
 
     //send the response
